@@ -10,8 +10,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
   const { isInitialized, error } = useSupabase();
 
   useEffect(() => {
-    const cleanup = scheduleCartCleanup(15); // Run every 15 minutes
-    return () => clearInterval(cleanup);
+    const cleanupInterval = scheduleCartCleanup(15); // Run every 15 minutes
+    return () => clearInterval(cleanupInterval);
   }, []);
 
   if (error) {

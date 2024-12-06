@@ -39,6 +39,6 @@ export async function cleanupOldCarts(): Promise<void> {
   }
 }
 
-export async function scheduleCartCleanup(intervalMinutes: number = 15): Promise<NodeJS.Timer> {
+export function scheduleCartCleanup(intervalMinutes: number = 15): NodeJS.Timer {
   return setInterval(cleanupOldCarts, intervalMinutes * 60 * 1000);
 }
