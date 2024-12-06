@@ -35,10 +35,26 @@ export async function cleanupOldCarts(): Promise<void> {
 
   } catch (error) {
     console.error('Error cleaning up old carts:', error);
-    throw error;
   }
 }
 
-export function scheduleCartCleanup(intervalMinutes: number = 15): NodeJS.Timer {
-  return setInterval(cleanupOldCarts, intervalMinutes * 60 * 1000);
+let cleanupInterval: NodeJS.Timeout | null = null;
+
+export function scheduleCartCleanup(intervalMinutes: number = 15): NodeJS.Timeout {
+  if (cleanupInterval) {
+    clearInterval(cleanupInterval);
+  }
+  
+  cleanupInterval = setInterval(() => {
+    cleanupOldCarts().catch(console.error);
+  }, intervalMinutes * 60 * 1000);
+  
+  return cleanupInterval;
+}
+
+export function stopCartCleanup(): void {
+  if (cleanupInterval) {
+    clearInterval(cleanupInterval);
+    cleanupInterval = null;
+  }
 }
